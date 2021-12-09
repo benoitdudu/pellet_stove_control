@@ -2,6 +2,6 @@
     "fan1_speed": 1,
     "fan2_speed": 1,
     "flame_power": 1,
-    "mode": 0,
+    "mode": false,
     "send_data": true
 }
