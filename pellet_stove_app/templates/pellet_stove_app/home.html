@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+  <p><a href="{% url 'login' %}">Log In</a></p>
+{% endif %}
+<form action="{% url 'pellet_stove_app:home' %}" method="post">
+  {% csrf_token %}
+  <fieldset
+  {% if not user.is_authenticated %}
+  disabled="disabled"
+  {% endif %}
+  >
+      <legend>Commandes :</legend>
+      <label for="send_commands">Envoie Des Commandes</label>
+      <input type="checkbox" id="send_commands" name="send_commands" {% if pellet_cmds.send_commands %} checked {% endif %}><br>
+      <label for="fan1_speed">Vitesse Ventilateur 1 :</label>
+      <input type="range" name="fan1_speed" id="fan1_speed" value="{{ pellet_cmds.fan1_speed }}" min="1" max="5"><br>
+      <label for="fan2_speed">Vitesse Ventilateur 2 :</label>
+      <input type="range" name="fan2_speed" id="fan2_speed" value="{{ pellet_cmds.fan2_speed }}" min="1" max="5"><br>
+      <label for="flame_power">Puissance De La Flamme :</label>
+      <input type="range" name="flame_power" id="flame_power" value="{{ pellet_cmds.flame_power }}" min="1" max="5"><br>
+      <label for="mode">ON/OFF</label>
+      <input type="checkbox" id="mode" name="mode" {% if pellet_cmds.mode %} checked {% endif %}><br>
+  </fieldset>
+  {% if user.is_authenticated %}
+  <input type="submit" value="Envoyer">
+  {% endif %}
+</form>
+{% endblock %}
