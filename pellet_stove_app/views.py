@@ -11,6 +11,7 @@ def home(request):
         c.fan2_speed = request.POST['fan2_speed']
         c.flame_power = request.POST['flame_power']
         c.mode = True  if ('mode' in request.POST) else False
+        c.SendCommand()
 
     context = {'pellet_cmds': c,}
     return render(request, 'pellet_stove_app/home.html', context)

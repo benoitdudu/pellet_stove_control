@@ -1,4 +1,6 @@
 from django.db import models
+import multiprocessing
+from .send_command import ProcessSendCommand
 
 class PelletStoveCmd():
     def __init__(self):
@@ -7,6 +9,21 @@ class PelletStoveCmd():
         self.fan2_speed = 5
         self.flame_power = 3
         self.mode = True
+        self.QueueCmd = multiprocessing.Queue()
+
+        #self.p1 = multiprocessing.Process(target=ProcessSendCommand, args=(self.QueueCmd,))
+        #self.p1.start()
+
+    def SendCommand(self):
+        self.QueueCmd.put(self.ConvertRequestToDict(), block=False)
+
+    def ConvertRequestToDict(self):
+        d = {"send_commands": self.send_commands,
+             "fan1_speed": self.fan1_speed,
+             "fan2_speed": self.fan2_speed,
+             "flame_power": self.flame_power,
+             "mode": self.mode}
+        return d
 
     def __str__(self) -> str:
         s  = 'send_commands = {0}\n'.format(self.send_commands)
