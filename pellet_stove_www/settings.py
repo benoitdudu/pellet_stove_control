@@ -11,16 +11,19 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+f = open(BASE_DIR + '/.env.json')
+DATA_ENV = json.load(f)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%pazh_v9zm@9e+tnclu-2lp9sy^n3d(^l)vj)r4ms3!dodsx#c'
+SECRET_KEY = DATA_ENV['SECRET']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
