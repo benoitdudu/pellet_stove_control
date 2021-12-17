@@ -1,14 +1,26 @@
 import queue
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 
 def ProcessSendCommand(queueCmd):
-    print('ProcessSendCommand {}'.format(os.getpid()))
+    log_formatter = logging.Formatter('%(asctime)s:%(message)s')
+
+    logFile = os.path.dirname(os.path.abspath(__file__)) + '/ProcessSendCommand.log'
+    my_handler = RotatingFileHandler(logFile, maxBytes=1*1024*1024, backupCount=1)
+    my_handler.setFormatter(log_formatter)
+
+    logging.basicConfig(level=logging.INFO, handlers=[my_handler])
+    logging.info('ProcessSendCommand {}'.format(os.getpid()))
+
     timeOut = None
     sequenceNb = 0
     cmdPrevious = {}
     while True:
         try:
             cmd = queueCmd.get(True, timeOut)
+            if cmd['send_commands'] == 0:
+                timeOut = None
             if cmdPrevious == cmd:
                 continue
             sequenceNb = 0
@@ -17,7 +29,6 @@ def ProcessSendCommand(queueCmd):
             else:
                 timeOut = 1
         except queue.Empty:
-            print('{} timeout reached '.format(cmd))
             sequenceNb += 1
             if cmdPrevious['mode'] == 0:
                 if sequenceNb == 3:
@@ -26,5 +37,5 @@ def ProcessSendCommand(queueCmd):
                 timeOut = 10
 
         cmdPrevious = cmd
-        print('{0} sequenceNb {1}'.format(cmd, sequenceNb))
+        logging.info('{0} sequenceNb {1} timeOut {2}'.format(cmd, sequenceNb, timeOut))
 
