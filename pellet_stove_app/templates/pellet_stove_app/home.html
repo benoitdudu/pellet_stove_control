@@ -2,9 +2,9 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
+  <p><a href="{% url 'logout' %}">D&eacute;connexion</a></p>
 {% else %}
-  <p><a href="{% url 'login' %}">Log In</a></p>
+  <p><a href="{% url 'login' %}">Connexion</a></p>
 {% endif %}
 <form action="{% url 'pellet_stove_app:home' %}" method="post">
   {% csrf_token %}
