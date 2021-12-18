@@ -1,6 +1,7 @@
 from django.db import models
 import multiprocessing
 from .send_command import ProcessSendCommand
+from django.conf import settings
 
 class PelletStoveCmd():
     def __init__(self):
@@ -11,8 +12,8 @@ class PelletStoveCmd():
         self.mode = True
         self.QueueCmd = multiprocessing.Queue()
 
-        #self.p1 = multiprocessing.Process(target=ProcessSendCommand, args=(self.QueueCmd,))
-        #self.p1.start()
+        self.p1 = multiprocessing.Process(target=ProcessSendCommand, args=(self.QueueCmd, settings.DATA_ENV['REMOTE_ID']))
+        self.p1.start()
 
     def SendCommand(self):
         self.QueueCmd.put(self.ConvertRequestToDict(), block=False)
