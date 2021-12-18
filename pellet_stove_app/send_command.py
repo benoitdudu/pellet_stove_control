@@ -21,6 +21,7 @@ def getTimeoutInMinutes(inTimeout):
     return inTimeout / 60
 
 def ProcessSendCommand(queueCmd, remoteId):
+    remoteId = int(remoteId, base=16)
     log_formatter = logging.Formatter('%(asctime)s:%(message)s')
 
     logFile = os.path.dirname(os.path.abspath(__file__)) + '/ProcessSendCommand.log'
